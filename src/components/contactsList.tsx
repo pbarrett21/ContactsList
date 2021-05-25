@@ -1,5 +1,4 @@
 import React from 'react';
-import InitialContactData from '../resources/initialContactData';
 import {Contact} from '../models/contact';
 import ContactCard from './contactCard/contactCard';
 import styled from 'styled-components';

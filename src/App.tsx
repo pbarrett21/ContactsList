@@ -27,9 +27,7 @@ const reducer = (state: Contact[], action: Action): Contact[] => {
             state[contactToChangeIndex] = action.selectedContact;
             return state;
         case OpEnum.DELETE:
-            const contactToDeleteIndex = state.findIndex(contact => contact.id === action.selectedContact.id);
-            state.splice(contactToDeleteIndex, 1);
-            return state;
+            return state.filter(contact => contact.id !== action.selectedContact.id);
         default:
             throw new Error();
     }
@@ -38,10 +36,13 @@ const reducer = (state: Contact[], action: Action): Contact[] => {
 const defaultValue: {
     allContacts: Contact[],
     updateContacts: React.Dispatch<ReducerAction<(prevState: Contact[], action: Action) => {}>>
-} = {allContacts: InitialContactData, updateContacts: () => {}};
+} = {
+    allContacts: InitialContactData,
+    updateContacts: () => {
+    }
+};
 
 export const ContactsDispatch = React.createContext(defaultValue);
-
 
 function App() {
     const [allContacts, updateContacts]: [Contact[], Dispatch<Action>] = useReducer(reducer, initialState);
