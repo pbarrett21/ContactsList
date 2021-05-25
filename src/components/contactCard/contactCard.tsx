@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Contact} from '../../models/contact';
 import styled from 'styled-components';
 import './contact-card-styles.scss';
 import {useHistory} from 'react-router-dom';
+import {ContactsDispatch} from '../../App';
+import OpEnum from '../../models/OpEnum';
 
 const CardContainer = styled.div`
   padding: 1rem;
@@ -80,6 +82,7 @@ const ContactCard = (props: { contact: Contact }) => {
     const [expanded, setExpanded] = useState(false);
     const cardId = `card-${props.contact.firstName}`;
     const history = useHistory();
+    const dispatch = useContext(ContactsDispatch).updateContacts;
 
     const toggleExpand = () => {
         const element: HTMLElement = document.getElementById(cardId) as HTMLElement;
@@ -105,6 +108,10 @@ const ContactCard = (props: { contact: Contact }) => {
         });
     }
 
+    const deleteContact = () => {
+        dispatch({actionType: OpEnum.DELETE, selectedContact: props.contact});
+    }
+
     return (
         <CardContainer id={cardId}>
             <CardTopRow onClick={() => toggleExpand()}>
@@ -120,7 +127,7 @@ const ContactCard = (props: { contact: Contact }) => {
                     <p>{props.contact.emailAddress}</p>
                     <ButtonContainer>
                         <CardButton onClick={editContact}>Edit</CardButton>
-                        <CardButton delete>Delete</CardButton>
+                        <CardButton onClick={deleteContact} delete>Delete</CardButton>
                     </ButtonContainer>
                 </div>
                 : null}

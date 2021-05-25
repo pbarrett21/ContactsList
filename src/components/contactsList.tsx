@@ -35,7 +35,7 @@ const ContactsList = (props: { contactsData: Contact[] }) => {
         <ContactsContainer>
             <AddContactButton onClick={addNewContact}>Add Contact</AddContactButton>
             {props.contactsData.map(contact => (
-                <li key={contact.firstName}>
+                <li key={contact.id + contact.firstName}>
                     <ContactCard contact={contact}/>
                 </li>
             ))}

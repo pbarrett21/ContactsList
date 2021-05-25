@@ -107,12 +107,12 @@ const ContactEntryScreen = (props: { contact: Contact | null, operation: OpEnum 
 
     const onConfirm = () => {
         const newContact: Contact = {
+            id: props.contact ? props.contact.id : null, // null on add new contact
             firstName: newFirstName,
             lastName: newLastName,
             phoneNumber: newPhoneNumber,
             emailAddress: newEmail
         }
-        console.error('=============>', newContact);
         dispatch({actionType: props.operation, selectedContact: newContact});
         history.push({
             pathname: '/',
