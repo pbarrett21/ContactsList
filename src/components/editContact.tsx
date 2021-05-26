@@ -8,7 +8,6 @@ const EditContact = () => {
     const location = useLocation<{ contact: Contact }>();
     const contactToEdit = location.state.contact;
 
-
     return (
         <ContactEntryScreen contact={contactToEdit} operation={OpEnum.EDIT}/>
     )

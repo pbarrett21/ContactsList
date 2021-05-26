@@ -5,6 +5,7 @@ import './contact-card-styles.scss';
 import {useHistory} from 'react-router-dom';
 import {ContactsDispatch} from '../../App';
 import OpEnum from '../../models/OpEnum';
+import Modal from 'react-modal';
 
 const CardContainer = styled.div`
   padding: 1rem;
@@ -78,11 +79,49 @@ const ContactInitials = styled.div`
   pointer-events: none;
 `
 
+const ModalPrompt = styled(Modal)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 30vw;
+  height: 10vw;
+  border: 2px solid #80A68F;
+  background-color: #EAFFE7;
+  border-radius: 8px;
+  
+  button {
+    margin-top: 1rem;
+  }
+`
+
+const ModalPromptButtons = styled.div`
+  display: flex;
+  width: 60%;
+  justify-content: space-around;
+`
+
+// accessibility concerning modals
+Modal.setAppElement('#root')
+
 const ContactCard = (props: { contact: Contact }) => {
     const [expanded, setExpanded] = useState(false);
     const cardId = `card-${props.contact.firstName}`;
     const history = useHistory();
     const dispatch = useContext(ContactsDispatch).updateContacts;
+    const [modalIsOpen, setIsOpen] = React.useState(false);
+
+    const openModal = () => {
+        setIsOpen(true);
+    }
+
+    const closeModal = () => {
+        setIsOpen(false);
+    }
 
     const toggleExpand = () => {
         const element: HTMLElement = document.getElementById(cardId) as HTMLElement;
@@ -109,11 +148,22 @@ const ContactCard = (props: { contact: Contact }) => {
     }
 
     const deleteContact = () => {
+        closeModal();
         dispatch({actionType: OpEnum.DELETE, selectedContact: props.contact});
     }
 
     return (
         <CardContainer id={cardId}>
+            <ModalPrompt
+                isOpen={modalIsOpen}
+                contentLabel="Delete Prompt"
+            >
+                <p>Are you sure you want to delete?</p>
+                <ModalPromptButtons>
+                    <button onClick={closeModal}>Cancel</button>
+                    <button onClick={deleteContact}>Delete</button>
+                </ModalPromptButtons>
+            </ModalPrompt>
             <CardTopRow onClick={() => toggleExpand()}>
                 <ContactInitials>{props.contact.firstName.charAt(0) + props.contact.lastName.charAt(0)}</ContactInitials>
                 <span>{`${props.contact.firstName} ${props.contact.lastName}`}</span>
@@ -127,7 +177,7 @@ const ContactCard = (props: { contact: Contact }) => {
                     <p>{props.contact.emailAddress}</p>
                     <ButtonContainer>
                         <CardButton onClick={editContact}>Edit</CardButton>
-                        <CardButton onClick={deleteContact} delete>Delete</CardButton>
+                        <CardButton onClick={openModal} delete>Delete</CardButton>
                     </ButtonContainer>
                 </div>
                 : null}
