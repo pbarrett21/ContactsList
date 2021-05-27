@@ -1,4 +1,10 @@
-# Getting Started with Create React App
+# Contacts List
+
+A simple contacts list that allows you to add, edit, view, and delete contacts where contacts include a name, phone number, and email address
+
+![](contactListDemo.gif)
+
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
